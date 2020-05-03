@@ -38,6 +38,28 @@ export function* signIn({ payload }) {
   }
 }
 
+export function* signUp({ payload }) {
+  try {
+    const { name, email, password } = payload;
+
+    yield call(api.post, 'users', {
+      name,
+      email,
+      password,
+      provider: true,
+    });
+
+    history.push('/');
+  } catch (error) {
+    toast.error('Registration failed, verify your data.');
+
+    yield put(signFailure());
+  }
+}
+
 // TakeLatest listen the latest action call, then execute the function of the
 // second parammeter
-export default all([takeLatest('@auth/SIGN_IN_REQUEST', signIn)]);
+export default all([
+  takeLatest('@auth/SIGN_IN_REQUEST', signIn),
+  takeLatest('@auth/SIGN_UP_REQUEST', signUp),
+]);

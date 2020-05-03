@@ -1,12 +1,19 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
 
 import logo from '~/assets/logo.svg';
 
+import { signUpRequest } from '~/store/modules/auth/actions';
+
 export default function SignUp() {
-  function handleSubmit(data) {}
+  const dispatch = useDispatch();
+
+  function handleSubmit({ name, email, password }) {
+    dispatch(signUpRequest(name, email, password));
+  }
 
   const schema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
