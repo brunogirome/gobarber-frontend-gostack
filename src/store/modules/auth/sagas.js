@@ -29,6 +29,8 @@ export function* signIn({ payload }) {
       return;
     }
 
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+
     yield put(signInSuccess(token, user));
 
     history.push('/dashboard');
@@ -57,9 +59,23 @@ export function* signUp({ payload }) {
   }
 }
 
+export function setToken({ payload }) {
+  if (!payload) return;
+
+  const { token } = payload.auth;
+
+  if (token) {
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+  }
+}
+
 // TakeLatest listen the latest action call, then execute the function of the
 // second parammeter
 export default all([
+  // Seems like the persist/REHYDRATE always execute when persist is installed
+  // on application. So, you can take the token value from persist storage
+  // anytime you execute a redux action
+  takeLatest('persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
   takeLatest('@auth/SIGN_UP_REQUEST', signUp),
 ]);
