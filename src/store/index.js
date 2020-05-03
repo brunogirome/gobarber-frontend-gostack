@@ -19,6 +19,9 @@ const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
 
 const middlewares = [sagaMiddleware];
 // Function exported from "createStore" file
+// The persistorReducer() integrate all reducers from application into the
+// persistReducer. The persistor makes the data saved on Redux storage
+// permanent on browser/phone, saving it locally
 const store = createStore(persistReducers(rootReducer), middlewares);
 const persistor = persistStore(store);
 // Running middlewares
